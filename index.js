@@ -58,7 +58,9 @@ async function main() {
   }
 
   if (currentState === 'awaitingPrompt') {
-    messages.push({ role: 'user', content: userMessage });
+    const codeFocusedPrompt = `${userMessage} Please provide the response as code. If there is any commentary, include it as comments in the code only.`;
+
+    messages.push({ role: 'user', content: codeFocusedPrompt });
     currentState = null; // Reset state after getting the prompt
   } else {
     messages.push({ role: 'user', content: userMessage });
