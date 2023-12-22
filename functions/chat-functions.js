@@ -37,14 +37,29 @@ function writeContentFile(writeToFilePath, contentToWrite, baseDir) {
 }
 
 async function updateReferenceFiles(rl, readSpecificFiles, specificFiles, baseDir, openai, messages) {
-  console.log('Updating reference files...');
+  console.log('Updating reference files...'.bgYellow);
 
-  // Read the contents of the specific files
-  let updatedContent = readSpecificFiles(specificFiles.map(file => path.join(baseDir, file)));
+  let updatedContent = '';
+
+  for (const file of specificFiles) {
+    // Construct the full path of the file
+    const fullPath = path.join(baseDir, file);
+
+    // Log the name of the file
+    console.log(`Reading file: ${fullPath}`.yellow);
+
+    try {
+      // Read the file content
+      const content = fs.readFileSync(fullPath, 'utf8');
+      updatedContent += content + '\n';
+    } catch (error) {
+      console.error(`Error reading file ${fullPath}: ${error.message}`.bgRed);
+    }
+  }
 
   // Check if there is content to update
   if (!updatedContent.trim()) {
-    console.log('No content to update.');
+    console.log('No content to update.'.bgRed);
     return;
   }
 
@@ -54,7 +69,7 @@ async function updateReferenceFiles(rl, readSpecificFiles, specificFiles, baseDi
     content: `Updated reference content:\n${updatedContent}`
   });
 
-  console.log('Reference files content added to the chat history.');
+  console.log('Reference files content added to the chat history.'.bgYellow);
 
 }
 
