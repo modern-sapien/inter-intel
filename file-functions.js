@@ -40,8 +40,9 @@ function appendToFile(filePath, data) {
 
 
 // Example usage
-const specificFiles = ['./google.spec.ts', 'chat-functions.js', 'openai-test.js', './reference.txt']; // Replace with actual file paths
+const specificFiles = ['./google.spec.ts', './reference.txt']; // Replace with actual file paths
 // const titles = logFileNames(specificFiles)
+
 console.log("...".green.bold)
 console.log("...".green.bold)
 console.log("...".green.bold)

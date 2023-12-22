@@ -5,7 +5,6 @@ const path = require('path');
 require('dotenv').config();
 require('colors');
 
-// Import the readDirRecursively function
 const {
   readSpecificFiles,
   specificFiles,
