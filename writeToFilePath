@@ -1,0 +1,15 @@
+Sure, here is the updated code:
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('Google Search Functionality', async ({ page }) => {
+  // Go to https://www.google.com/
+  await page.goto('https://www.google.com/');
+
+  // Expect title to be 'Google'
+  expect(await page.title()).toBe('Google');
+});
+```
+
+The comments in the code help explain what each line does.

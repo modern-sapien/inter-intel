@@ -9,8 +9,8 @@ const {
   readSpecificFiles,
   specificFiles,
   appendToFile,
-} = require('./file-functions.js');
-const { askQuestion, parseCommandAndWriteToFile } = require('./chat-functions.js');
+} = require('./functions/file-functions.js');
+const { askQuestion, writeContentFile } = require('./functions/chat-functions.js');
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -22,6 +22,8 @@ const rl = readline.createInterface({
 });
 
 async function main() {
+  let currentState = null; // Initialize currentState
+  let tempFilePath = '';
   // Use readDirRecursively to get all file contents
   let directoryContent = readSpecificFiles(specificFiles);
 
@@ -35,37 +37,48 @@ async function main() {
   while (true) {
     const userMessage = await askQuestion(rl, 'You: ');
 
-    // Exit condition
-    if (userMessage.toLowerCase() === 'exit') {
-      console.log('Exiting chat...'.red);
-      rl.close();
-      break;
-    }
+  // Exit condition
+  if (userMessage.toLowerCase() === 'exit') {
+    console.log('Exiting chat...'.red);
+    rl.close();
+    break;
+  }
 
-    if (userMessage.toLowerCase().startsWith('update file: ')) {
-      const updateContent = userMessage.slice(13); // Remove 'update file: ' part
-      appendToFile(path.join(__dirname, 'reference.txt'), updateContent);
-      console.log('File updated.'.bgYellow);
-      continue; // Skip sending this to GPT
-    }
+  if (currentState === null && userMessage.toLowerCase() === '//updatefile') {
+    currentState = 'awaitingFileName';
+    console.log('Please provide file name to work with:'.yellow);
+    continue;
+  }
 
+  if (currentState === 'awaitingFileName') {
+    tempFilePath = userMessage;
+    currentState = 'awaitingPrompt';
+    console.log('Please provide prompt on what to update:'.yellow);
+    continue;
+  }
+
+  if (currentState === 'awaitingPrompt') {
     messages.push({ role: 'user', content: userMessage });
+    currentState = null; // Reset state after getting the prompt
+  } else {
+    messages.push({ role: 'user', content: userMessage });
+  }
 
-    const completion = await openai.chat.completions.create({
-      messages: messages,
-      model: 'gpt-4',
-    });
+  const completion = await openai.chat.completions.create({
+    messages: messages,
+    model: 'gpt-4',
+  });
 
-    const botMessage = completion.choices[0].message.content;
-    console.log('ChatGPT:'.green, botMessage.green);
+  const botMessage = completion.choices[0].message.content;
+  console.log('ChatGPT:'.green, botMessage.green);
 
-    messages.push({ role: 'assistant', content: botMessage });
+  if (currentState === null && tempFilePath) {
+    writeContentFile(tempFilePath, botMessage, __dirname);
+    console.log(`File at ${tempFilePath} updated.`.bgYellow);
+    tempFilePath = ''; // Clear tempFilePath after use
+  }
 
-      // Use the imported function to handle file writing
-      const fileWriteResult = parseCommandAndWriteToFile(userMessage, botMessage, __dirname);
-      if (fileWriteResult) {
-        console.log(fileWriteResult.bgYellow);
-      }
+  messages.push({ role: 'assistant', content: botMessage });
   
   }
 }
