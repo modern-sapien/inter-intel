@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// READING
+// READING FOR INITAL REFERENCE
 function readSpecificFiles(filePaths) {
   let allContent = "";
 
@@ -20,14 +20,13 @@ function readSpecificFiles(filePaths) {
   return allContent;
 }
 
-// WRITING
+// LOG FILE NAMES
 function logFileNames(filePaths) {
   let fileNames = [];
 
   console.log("GPT Reading Reference Files:".green.bold);
   filePaths.forEach(filePath => {
     const fileName = path.basename(filePath);
-    // console.log(fileName);
     fileNames.push(fileName); // Add the file name to the array
   });
 
@@ -37,7 +36,6 @@ function logFileNames(filePaths) {
 function appendToFile(filePath, data) {
   fs.appendFileSync(filePath, data + '\n');
 }
-
 
 // Example usage
 const specificFiles = ['./google.spec.ts', './reference.txt']; // Replace with actual file paths

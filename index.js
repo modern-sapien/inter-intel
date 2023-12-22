@@ -8,9 +8,8 @@ require('colors');
 const {
   readSpecificFiles,
   specificFiles,
-  appendToFile,
 } = require('./functions/file-functions.js');
-const { askQuestion, writeContentFile } = require('./functions/chat-functions.js');
+const { askQuestion, writeContentFile, updateReferenceFiles } = require('./functions/chat-functions.js');
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -29,7 +28,7 @@ async function main() {
 
   let messages = [
     {
-      role: 'system',
+      role: 'user',
       content: directoryContent,
     },
   ];
@@ -44,11 +43,19 @@ async function main() {
     break;
   }
 
-  if (currentState === null && userMessage.toLowerCase() === '//updatefile') {
-    currentState = 'awaitingFileName';
-    console.log('Please provide file name to work with:'.yellow);
-    continue;
-  }
+ // Check for the command to update reference files
+ if (userMessage.toLowerCase() === '//updatefiles') {
+  await updateReferenceFiles(
+    rl,
+    readSpecificFiles,
+    specificFiles,
+    __dirname,
+    openai,
+    messages
+  );
+  continue; // Continue to the next iteration of the loop
+}
+
 
   if (currentState === 'awaitingFileName') {
     tempFilePath = userMessage;

@@ -36,7 +36,28 @@ function writeContentFile(writeToFilePath, contentToWrite, baseDir) {
   return null;
 }
 
+async function updateReferenceFiles(rl, readSpecificFiles, specificFiles, baseDir, openai, messages) {
+  console.log('Updating reference files...');
+
+  // Read the contents of the specific files
+  let updatedContent = readSpecificFiles(specificFiles.map(file => path.join(baseDir, file)));
+
+  // Check if there is content to update
+  if (!updatedContent.trim()) {
+    console.log('No content to update.');
+    return;
+  }
+
+  // Add the updated content as a message to the chat history
+  messages.push({
+    role: 'user',
+    content: `Updated reference content:\n${updatedContent}`
+  });
+
+  console.log('Reference files content added to the chat history.');
+
+}
 
 module.exports = {
-  askQuestion, writeContentFile
+  askQuestion, writeContentFile, updateReferenceFiles
 }
