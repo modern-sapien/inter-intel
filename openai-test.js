@@ -6,7 +6,12 @@ require('dotenv').config();
 require('colors');
 
 // Import the readDirRecursively function
-const { readSpecificFiles, specificFiles } = require('./chat-functions.js');
+const {
+  readSpecificFiles,
+  specificFiles,
+  appendToFile,
+} = require('./file-functions.js');
+const { askQuestion } = require('./chat-functions');
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -16,18 +21,6 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
-function appendToFile(filePath, data) {
-  fs.appendFileSync(filePath, data + '\n');
-}
-
-async function askQuestion(prompt) {
-  return new Promise((resolve) => {
-    rl.question(prompt.blue, (input) => {
-      resolve(input);
-    });
-  });
-}
 
 async function main() {
   // Use readDirRecursively to get all file contents
@@ -41,7 +34,7 @@ async function main() {
   ];
 
   while (true) {
-    const userMessage = await askQuestion('You: ');
+    const userMessage = await askQuestion(rl, 'You: ');
 
     // Exit condition
     if (userMessage.toLowerCase() === 'exit') {
