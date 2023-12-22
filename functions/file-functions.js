@@ -44,7 +44,7 @@ const specificFiles = ['./google.spec.ts', './reference.txt']; // Replace with a
 console.log("...".green.bold)
 console.log("...".green.bold)
 console.log("...".green.bold)
-console.log("Files we're referencing during our interaction".green.bold, logFileNames(specificFiles))
+console.log("Files content that will guide our interactions moving forward".green.bold, logFileNames(specificFiles))
 
 // Export the function and the array
 module.exports = {

@@ -28,7 +28,7 @@ async function main() {
 
   let messages = [
     {
-      role: 'user',
+      role: 'system',
       content: directoryContent,
     },
   ];
