@@ -7,11 +7,9 @@ function readSpecificFiles(filePaths) {
   
   try {
     // Read the content of the config file
-    const configContent = fs.readFileSync(configFilePath, 'utf8');
-    
+    const configContent = fs.readFileSync(configFilePath, 'utf8');    
     // Parse the config file content as JavaScript
     const config = eval(configContent);
-    
     // Extract the file paths from the config object
     const filePaths = config.filePaths;
     

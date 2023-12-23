@@ -97,7 +97,7 @@ async function main() {
 
     if (currentState === null && tempFilePath) {
       writeContentFile(tempFilePath, botMessage, __dirname);
-      console.log(`File at ${tempFilePath} updated.`.bgYellow);
+      console.log(`File at ${tempFilePath} updated.`.yellow);
       tempFilePath = ''; // Clear tempFilePath after use
     }
 
