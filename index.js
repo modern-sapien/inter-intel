@@ -75,9 +75,9 @@ async function main() {
 
     if (currentState === 'awaitingPrompt') {
       const codeFocusedPrompt = `${userMessage} Please provide the response as code only. NO need to use code blocks.
-      If there is any commentary, include it as comments // LIKE THIS in the code only.
+      If there is any commentary you feel is necessary, include it as comments // like this in the code only.
       Your response is being ported directly to a file, so any superflous commentary outside of code is unnecessary
-      Your entire response is code so no use for 'javascript' demarcation, nothing outside of that`;
+      Your entire response is code so no use for 'javascript' or other language demarcation`;
 
       messages.push({ role: 'user', content: codeFocusedPrompt });
       currentState = null; // Reset state after getting the prompt
@@ -87,7 +87,7 @@ async function main() {
 
     const completion = await openai.chat.completions.create({
       messages: messages,
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo',
     });
 
     const botMessage = completion.choices[0].message.content;
