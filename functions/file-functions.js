@@ -23,31 +23,29 @@ function readSpecificFiles(filePaths) {
         // Read the file content and append it to allContent
         allContent += fs.readFileSync(absolutePath, 'utf8') + '\n';
       } catch (error) {
-        console.error(`Error reading file ${filePath}: ${error.message}`);
+        console.error(`Error reading file ${filePath}: ${error.message}`.bgRed);
       }
     });
+
+        // Add console.log statements to communicate to the user
+        console.log('...'.green.bold);
+        console.log('...'.green.bold);
+        console.log('...'.green.bold);
+        console.log('Files content that will guide our interactions moving forward'.green.bold, logFileNames(filePaths));
+      
   
     return allContent;
   } catch (error) {
-    console.error(`Error reading config file: ${error.message}`);
+    console.error(`Error reading config file: ${error.message}`.bgRed);
     return '';
   }
-}
-// Get files from user
-function getFilePathsFromUser(rl) {
-  return new Promise((resolve) => {
-    rl.question('Enter comma-separated file paths: ', (input) => {
-      const filePaths = input.split(',').map((filePath) => filePath.trim());
-      resolve(filePaths);
-    });
-  });
 }
 
 // LOG FILE NAMES
 function logFileNames(filePaths) {
   let fileNames = [];
 
-  console.log('GPT Reading Reference Files:'.green.bold);
+  console.log('GPT Reading Reference Files:'.green);
   filePaths.forEach((filePath) => {
     const fileName = path.basename(filePath);
     fileNames.push(fileName); // Add the file name to the array
@@ -60,27 +58,7 @@ function appendToFile(filePath, data) {
   fs.appendFileSync(filePath, data + '\n');
 }
 
-// Example usage
-const specificFiles = [
-  './functions/file-functions.js',
-  './functions/chat-functions.js',
-  'index.js',
-  './reference.txt',
-]; // Replace with actual file paths
-// const titles = logFileNames(specificFiles)
-
-console.log('...'.green.bold);
-console.log('...'.green.bold);
-console.log('...'.green.bold);
-console.log(
-  'Files content that will guide our interactions moving forward'.green.bold,
-  logFileNames(specificFiles)
-);
-
 // Export the function and the array
 module.exports = {
-  appendToFile,
   readSpecificFiles,
-  specificFiles,
-  getFilePathsFromUser
 };

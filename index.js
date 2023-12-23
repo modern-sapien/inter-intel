@@ -7,7 +7,6 @@ require('colors');
 
 const {
   readSpecificFiles,
-  // specificFiles,
 } = require('./functions/file-functions.js');
 const {
   askQuestion,
@@ -40,7 +39,7 @@ async function main() {
   ];
 
   while (true) {
-    const userMessage = await askQuestion(rl, 'You: ');
+    const userMessage = await askQuestion(rl, 'You: '.blue.bold);
 
     // Exit condition
     if (userMessage.toLowerCase() === 'exit') {
@@ -50,7 +49,7 @@ async function main() {
     }
 
     // Check for the command to update reference files
-    if (userMessage.toLowerCase() === '//updatereference') {
+    if (userMessage.toLowerCase() === '//readReference') {
       await updateReferenceFiles(
         rl,
         readSpecificFiles,
@@ -62,8 +61,9 @@ async function main() {
       continue; // Continue to the next iteration of the loop
     }
 
-    if (currentState === null && userMessage.toLowerCase() === '//updatefile') {
+    if (currentState === null && userMessage.toLowerCase() === '//writeFile') {
       currentState = 'awaitingFileName';
+      console.log('System message:'.yellow);
       console.log('Please provide file name to work with:'.yellow);
       continue;
     }
@@ -71,7 +71,8 @@ async function main() {
     if (currentState === 'awaitingFileName') {
       tempFilePath = userMessage;
       currentState = 'awaitingPrompt';
-      console.log('Please provide prompt on what to update:'.yellow);
+      console.log('System message:'.yellow);
+      console.log('Please provide a detailed prompt on what to update:'.yellow);
       continue;
     }
 
@@ -93,7 +94,8 @@ async function main() {
     });
 
     const botMessage = completion.choices[0].message.content;
-    console.log('ChatGPT:'.green, botMessage.green);
+    console.log('ChatGPT:'.green, botMessage);
+    console.log('------'.green)
 
     if (currentState === null && tempFilePath) {
       writeContentFile(tempFilePath, botMessage, __dirname);
