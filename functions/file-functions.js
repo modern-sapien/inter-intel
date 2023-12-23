@@ -3,9 +3,9 @@ const path = require('path');
 
 // READING FOR INITAL REFERENCE
 function readSpecificFiles(filePaths) {
-  let allContent = "";
+  let allContent = '';
 
-  filePaths.forEach(filePath => {
+  filePaths.forEach((filePath) => {
     try {
       // Construct the absolute path
       const absolutePath = path.resolve(filePath);
@@ -24,8 +24,8 @@ function readSpecificFiles(filePaths) {
 function logFileNames(filePaths) {
   let fileNames = [];
 
-  console.log("GPT Reading Reference Files:".green.bold);
-  filePaths.forEach(filePath => {
+  console.log('GPT Reading Reference Files:'.green.bold);
+  filePaths.forEach((filePath) => {
     const fileName = path.basename(filePath);
     fileNames.push(fileName); // Add the file name to the array
   });
@@ -38,17 +38,25 @@ function appendToFile(filePath, data) {
 }
 
 // Example usage
-const specificFiles = ['./google.spec.ts', './reference.txt']; // Replace with actual file paths
+const specificFiles = [
+  './functions/file-functions.js',
+  './functions/chat-functions.js',
+  'index.js',
+  './reference.txt',
+]; // Replace with actual file paths
 // const titles = logFileNames(specificFiles)
 
-console.log("...".green.bold)
-console.log("...".green.bold)
-console.log("...".green.bold)
-console.log("Files content that will guide our interactions moving forward".green.bold, logFileNames(specificFiles))
+console.log('...'.green.bold);
+console.log('...'.green.bold);
+console.log('...'.green.bold);
+console.log(
+  'Files content that will guide our interactions moving forward'.green.bold,
+  logFileNames(specificFiles)
+);
 
 // Export the function and the array
 module.exports = {
   appendToFile,
   readSpecificFiles,
-  specificFiles
+  specificFiles,
 };
