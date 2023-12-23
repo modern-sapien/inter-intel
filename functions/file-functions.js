@@ -27,12 +27,9 @@ function readSpecificFiles(filePaths) {
       }
     });
 
-        // Add console.log statements to communicate to the user
-        console.log('...'.green.bold);
-        console.log('...'.green.bold);
-        console.log('...'.green.bold);
-        console.log('Files content that will guide our interactions moving forward'.green.bold, logFileNames(filePaths));
-      
+    // Add console.log statements to communicate to the user
+    console.log(`AI Reading Reference Files:`.yellow, logFileNames(filePaths));
+  
   
     return allContent;
   } catch (error) {
@@ -45,7 +42,8 @@ function readSpecificFiles(filePaths) {
 function logFileNames(filePaths) {
   let fileNames = [];
 
-  console.log('GPT Reading Reference Files:'.green);
+  console.log("")
+  console.log(`System message`.bgYellow + `: `.yellow);
   filePaths.forEach((filePath) => {
     const fileName = path.basename(filePath);
     fileNames.push(fileName); // Add the file name to the array
