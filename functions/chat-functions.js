@@ -9,32 +9,24 @@ async function askQuestion(rl, prompt) {
   });
 }
 
-function writeContentFile(writeToFilePath, contentToWrite, baseDir) {
+function writeContentFile(writeToFilePath, contentToWrite) {
   try {
-    // Ensure the directory path is correctly set
-    const directoryPath = path.join(baseDir, 'inter-intel/session-samples');
+    const directoryPath = path.join(__dirname, 'inter-intel/session-samples');
     if (!fs.existsSync(directoryPath)) {
-      fs.mkdirSync(directoryPath, { recursive: true }); // Create directory if it doesn't exist
+      fs.mkdirSync(directoryPath, { recursive: true });
     }
 
-    // Ensure filePath is correctly formatted
-    if (!writeToFilePath.startsWith('/')) {
-      writeToFilePath = '/' + writeToFilePath;
-    }
     const fullPath = path.join(directoryPath, writeToFilePath);
 
-    // Use a relative path for logging and returning
-    const relativePath = path.relative(baseDir, fullPath);
-    console.log(`System message`.yellow)
-    console.log(`Writing to: -> --> ->  `.yellow + `${relativePath}`); // Debug: Log the relative file path
-    
     fs.writeFileSync(fullPath, contentToWrite + '\n');
-    return 
-    
+
+    const relativePath = path.relative(__dirname, fullPath);
+    console.log(`Content written to ${relativePath}`);
+    return true;
   } catch (error) {
-    console.error(`Error in writeContentFile: ${error}`.bgRed); // Log any errors
+    console.error(`Error in writeContentFile: ${error.message}`.bgRed);
+    return false;
   }
-  return null;
 }
 
 async function updateReferenceFiles(rl, readSpecificFiles, specificFiles, baseDir, openai, messages) {
