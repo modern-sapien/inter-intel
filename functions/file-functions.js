@@ -28,10 +28,8 @@ function readSpecificFiles(filePaths) {
     });
 
     // Add console.log statements to communicate to the user
-    console.log(`AI Reading Reference Files:`.yellow, logFileNames(filePaths));
-  
-  
-    return allContent;
+    console.log(`AI sent reference files:`.yellow, `${logFileNames(filePaths)}`.yellow);
+      return allContent;
   } catch (error) {
     console.error(`Error reading config file: ${error.message}`.bgRed);
     return '';

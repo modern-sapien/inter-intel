@@ -9,22 +9,21 @@ async function askQuestion(rl, prompt) {
   });
 }
 
-function writeContentFile(writeToFilePath, contentToWrite) {
+function writeContentFile(writeToFilePath, contentToWrite, baseDir) {
   try {
-    const directoryPath = path.join(__dirname, 'inter-intel/session-samples');
+    const fullPath = path.join(baseDir, writeToFilePath);
+    const directoryPath = path.dirname(fullPath);
+
     if (!fs.existsSync(directoryPath)) {
       fs.mkdirSync(directoryPath, { recursive: true });
     }
 
-    const fullPath = path.join(directoryPath, writeToFilePath);
-
     fs.writeFileSync(fullPath, contentToWrite + '\n');
-
-    const relativePath = path.relative(__dirname, fullPath);
-    console.log(`Content written to ${relativePath}`);
+    console.log(`Content written to ${fullPath}`);
     return true;
+
   } catch (error) {
-    console.error(`Error in writeContentFile: ${error.message}`.bgRed);
+    console.error(`Error writing file: ${error.message}`);
     return false;
   }
 }
