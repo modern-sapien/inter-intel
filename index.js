@@ -7,7 +7,7 @@ require('colors');
 
 const {
   readSpecificFiles,
-  specificFiles,
+  // specificFiles,
 } = require('./functions/file-functions.js');
 const {
   askQuestion,
@@ -25,9 +25,11 @@ const rl = readline.createInterface({
 });
 
 async function main() {
+
   let currentState = null; // Initialize currentState
   let tempFilePath = '';
   // Use readDirRecursively to get all file contents
+  const specificFiles = ['./.config.js']
   let directoryContent = readSpecificFiles(specificFiles);
 
   let messages = [

@@ -3,21 +3,46 @@ const path = require('path');
 
 // READING FOR INITAL REFERENCE
 function readSpecificFiles(filePaths) {
-  let allContent = '';
-
-  filePaths.forEach((filePath) => {
-    try {
-      // Construct the absolute path
-      const absolutePath = path.resolve(filePath);
-
-      // Read the file content and append it to allContent
-      allContent += fs.readFileSync(absolutePath, 'utf8') + '\n';
-    } catch (error) {
-      console.error(`Error reading file ${filePath}: ${error.message}`);
-    }
+  const configFilePath = path.join(__dirname, '../inter-intel.config.js');
+  
+  try {
+    // Read the content of the config file
+    const configContent = fs.readFileSync(configFilePath, 'utf8');
+    
+    // Parse the config file content as JavaScript
+    const config = eval(configContent);
+    
+    // Extract the file paths from the config object
+    const filePaths = config.filePaths;
+    
+    let allContent = '';
+  
+    filePaths.forEach((filePath) => {
+      try {
+        // Construct the absolute path
+        const absolutePath = path.resolve(filePath);
+  
+        // Read the file content and append it to allContent
+        allContent += fs.readFileSync(absolutePath, 'utf8') + '\n';
+      } catch (error) {
+        console.error(`Error reading file ${filePath}: ${error.message}`);
+      }
+    });
+  
+    return allContent;
+  } catch (error) {
+    console.error(`Error reading config file: ${error.message}`);
+    return '';
+  }
+}
+// Get files from user
+function getFilePathsFromUser(rl) {
+  return new Promise((resolve) => {
+    rl.question('Enter comma-separated file paths: ', (input) => {
+      const filePaths = input.split(',').map((filePath) => filePath.trim());
+      resolve(filePaths);
+    });
   });
-
-  return allContent;
 }
 
 // LOG FILE NAMES
@@ -59,4 +84,5 @@ module.exports = {
   appendToFile,
   readSpecificFiles,
   specificFiles,
+  getFilePathsFromUser
 };

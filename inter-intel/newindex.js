@@ -81,7 +81,7 @@ async function main() {
       const codeFocusedPrompt = `${userMessage} Please provide the response as code only. NO need to use code blocks.
       If there is any commentary you feel is necessary, include it as comments // like this in the code only.
       Your response is being ported directly to a file, so any superflous commentary outside of code is unnecessary
-      Your entire response is code so no use for 'javascript' or other language demarcation`;
+      Your entire response is code being received in a FILE, so any commentary without // breaks the code`;
 
       messages.push({ role: 'user', content: codeFocusedPrompt });
       currentState = null; // Reset state after getting the prompt
