@@ -45,29 +45,30 @@ async function main() {
       rl.close();
       break;
     }
+
     if (userMessage.toLowerCase() === '//writefile' && currentState === null) {
       currentState = 'awaitingFileName';
-      console.log('Please provide a name of the session file'.yellow);
-      continue; // Skip the rest of the loop and start the next iteration
+      console.log('Please provide a name for the session file:'.yellow);
+      continue; // Skip to the next iteration
     } else if (currentState === 'awaitingFileName') {
       promptFileName = userMessage;
-      currentState = 'awaitPrompt';
-      console.log(
-        'Please provide the prompt that will help the AI write'.yellow
-      );
-      continue; // Skip the rest of the loop and start the next iteration
-    } else if (currentState === 'awaitPrompt') {
-      contentToWrite = userMessage;
-      console.log('here is some result'.yellow);
+      currentState = 'awaitingGPTPrompt';
+      console.log('Please provide a prompt for the AI:'.yellow);
+      continue; // Skip to the next iteration
+    } else if (currentState === 'awaitingGPTPrompt') {
+      promptForGPT = userMessage;
+      console.log('Generating content...'.yellow);
 
-      console.log(
-        writeFileFromPrompt(promptFileName, contentToWrite, __dirname),
-        'result'.bgGreen
-      );
-      currentState = null; // Reset state after getting the prompt
-      continue; // Skip the rest of the loop and start the next iteration
+      // Generate content using GPT
+      let gptResponse = await aiChatCompletion(openai, [{role: 'user', content: promptForGPT}], config.aiVersion);
+      let botMessage = gptResponse.choices[0].message.content;
+
+      console.log('Writing content to file...'.yellow);
+      console.log(writeFileFromPrompt(promptFileName, botMessage, __dirname), 'result'.bgGreen);
+      currentState = null; // Reset state after completing the operation
+      continue; // Skip to the next iteration
     }
-
+    
     if (userMessage.startsWith('//')) {
       let currentState = null;
 
