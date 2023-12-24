@@ -7,14 +7,12 @@ require('dotenv').config();
 require('colors');
 
 const { readSpecificFiles } = require('./functions/file-functions.js');
-const {
-  askQuestion,
-  writeContentFile,
-} = require('./functions/chat-functions.js');
+const { askQuestion } = require('./functions/chat-functions.js');
+const { aiChatCompletion } = require('./functions/openai-functions.js');
 
 const openai = new OpenAI({
   apiKey: config.apiKey,
-  model: config.aiVersion
+  model: config.aiVersion,
 });
 
 const rl = readline.createInterface({
@@ -56,10 +54,11 @@ async function main() {
           role: 'user',
           content: `please just acknowledge you have read the files and their names ${content}`,
         });
-        const completion = await openai.chat.completions.create({
-          messages: messages,
-          model: config.aiVersion,
-        });
+        const completion = await aiChatCompletion(
+          openai,
+          messages,
+          config.aiVersion
+        );
 
         const botMessage = completion.choices[0].message.content;
         console.log('chatGPT message:'.bgGreen, botMessage);
@@ -69,10 +68,11 @@ async function main() {
       // Regular message processing and interaction with GPT model
       messages.push({ role: 'user', content: userMessage });
 
-      const completion = await openai.chat.completions.create({
-        messages: messages,
-        model: config.aiVersion,
-      });
+      const completion = await aiChatCompletion(
+        openai,
+        messages,
+        config.aiVersion
+      );
 
       const botMessage = completion.choices[0].message.content;
       console.log('chatGPT message:'.bgGreen, botMessage);
