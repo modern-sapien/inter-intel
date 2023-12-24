@@ -38,7 +38,12 @@ function readSpecificFiles(filePaths) {
 
 function writeFileFromPrompt(promptFileName, contentToWrite, baseDir) {
   try {
-    const fullPath = path.join(baseDir, `inter-intel/session-samples/${promptFileName}`);
+
+    if (!promptFileName.includes('.')) {
+      throw new Error("Invalid file name. Please include a file name with an extension (e.g., 'output.txt').");
+    }
+    
+    const fullPath = path.join(baseDir, `../inter-intel/session-samples/${promptFileName}`);
     const directoryPath = path.dirname(fullPath);
 
     if (!fs.existsSync(directoryPath)) {

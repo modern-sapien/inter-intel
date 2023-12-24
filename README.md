@@ -23,3 +23,17 @@ Here's a brief overview of the main functionalities, as contained in the index.j
 The application relies heavily on async-await pattern for handling the asynchronicity associated with reading user inputs and waiting for responses from the OpenAI 'aiChatCompletion' function. 
 
 Keep in mind that this is a high level overview and each functionality has its own level of implementation detail.
+
+
+File Structure
+
+project/
+├── functions/
+│   ├── chat-functions.js
+│   ├── file-functions.js
+│   ├── openai-functions.js
+│   ├── messageUtils.js
+│   ├── writeFileHandler.js
+│   └── readRefsHandler.js
+├── inter-intel.config.js
+└── index.js
