@@ -2,7 +2,7 @@ const OpenAI = require('openai');
 const readline = require('readline');
 const fs = require('fs');
 const path = require('path');
-const { config } = require('./inter-intel.config.js');
+const config = require('./inter-intel.config.js');
 require('dotenv').config();
 require('colors');
 
@@ -13,7 +13,8 @@ const {
 } = require('./functions/chat-functions.js');
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: config.apiKey,
+  model: config.aiVersion
 });
 
 const rl = readline.createInterface({
@@ -48,7 +49,7 @@ async function main() {
     if (userMessage.startsWith('//')) {
       if (userMessage.startsWith('//readRefs')) {
         console.log('System message:'.bgYellow);
-        console.log('Processing //readReference command...'.yellow);
+        console.log('Processing //readRefs command...'.yellow);
         const specificFiles = ['./.config.js'];
         const content = readSpecificFiles(specificFiles);
         messages.push({

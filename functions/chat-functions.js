@@ -58,7 +58,7 @@ async function updateReferenceFiles(rl, readSpecificFiles, specificFiles, baseDi
   // Add the updated content as a message to the chat history
   messages.push({
     role: 'user',
-    content: `Updated reference content:\n${updatedContent}`
+    content: `Updated references for our chat session:\n${updatedContent}`
   });
 
   console.log('Reference files content added to the chat history.'.bgYellow);
