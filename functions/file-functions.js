@@ -36,9 +36,9 @@ function readSpecificFiles(filePaths) {
   }
 }
 
-function writeFileFromPrompt(writeToFilePath, contentToWrite, baseDir) {
+function writeFileFromPrompt(promptFileName, contentToWrite, baseDir) {
   try {
-    const fullPath = path.join(baseDir, writeToFilePath);
+    const fullPath = path.join(baseDir, `inter-intel/session-samples/${promptFileName}`);
     const directoryPath = path.dirname(fullPath);
 
     if (!fs.existsSync(directoryPath)) {
@@ -46,11 +46,11 @@ function writeFileFromPrompt(writeToFilePath, contentToWrite, baseDir) {
     }
 
     fs.writeFileSync(fullPath, contentToWrite + '\n');
-    console.log(`Content written to ${fullPath}`);
+    console.log(`Content written to ${fullPath}`.yellow);
     return true;
 
   } catch (error) {
-    console.error(`Error writing file: ${error.message}`);
+    console.error(`Error writing file: ${error.message}`.bgRed);
     return false;
   }
 }

@@ -4,7 +4,10 @@ const config = require('./inter-intel.config.js');
 require('dotenv').config();
 require('colors');
 
-const { readSpecificFiles, writeFileFromPrompt } = require('./functions/file-functions.js');
+const {
+  readSpecificFiles,
+  writeFileFromPrompt,
+} = require('./functions/file-functions.js');
 const { askQuestion } = require('./functions/chat-functions.js');
 const { aiChatCompletion } = require('./functions/openai-functions.js');
 
@@ -19,18 +22,19 @@ const rl = readline.createInterface({
 });
 
 async function main() {
-  let currentState = null; // Initialize currentState
-  let tempFilePath = '';
-  // Use readDirRecursively to get all file contents
+  // Provides initial context for session
   const specificFiles = ['./.config.js'];
-  let directoryContent = readSpecificFiles(specificFiles);
-
+  let initialContent = readSpecificFiles(specificFiles);
   let messages = [
     {
       role: 'system',
-      content: directoryContent,
+      content: initialContent,
     },
   ];
+
+  let currentState = null;
+  let promptFileName = '';
+  let contentToWrite = '';
 
   while (true) {
     const userMessage = await askQuestion(rl, 'You: '.blue.bold);
@@ -41,8 +45,32 @@ async function main() {
       rl.close();
       break;
     }
+    if (userMessage.toLowerCase() === '//writefile' && currentState === null) {
+      currentState = 'awaitingFileName';
+      console.log('Please provide a name of the session file'.yellow);
+      continue; // Skip the rest of the loop and start the next iteration
+    } else if (currentState === 'awaitingFileName') {
+      promptFileName = userMessage;
+      currentState = 'awaitPrompt';
+      console.log(
+        'Please provide the prompt that will help the AI write'.yellow
+      );
+      continue; // Skip the rest of the loop and start the next iteration
+    } else if (currentState === 'awaitPrompt') {
+      contentToWrite = userMessage;
+      console.log('here is some result'.yellow);
+
+      console.log(
+        writeFileFromPrompt(promptFileName, contentToWrite, __dirname),
+        'result'.bgGreen
+      );
+      currentState = null; // Reset state after getting the prompt
+      continue; // Skip the rest of the loop and start the next iteration
+    }
 
     if (userMessage.startsWith('//')) {
+      let currentState = null;
+
       if (userMessage.startsWith('//readRefs')) {
         console.log('System message:'.bgYellow);
         console.log('Processing //readRefs command...'.yellow);
