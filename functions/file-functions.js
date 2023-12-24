@@ -36,6 +36,25 @@ function readSpecificFiles(filePaths) {
   }
 }
 
+function writeFileFromPrompt(writeToFilePath, contentToWrite, baseDir) {
+  try {
+    const fullPath = path.join(baseDir, writeToFilePath);
+    const directoryPath = path.dirname(fullPath);
+
+    if (!fs.existsSync(directoryPath)) {
+      fs.mkdirSync(directoryPath, { recursive: true });
+    }
+
+    fs.writeFileSync(fullPath, contentToWrite + '\n');
+    console.log(`Content written to ${fullPath}`);
+    return true;
+
+  } catch (error) {
+    console.error(`Error writing file: ${error.message}`);
+    return false;
+  }
+}
+
 // LOG FILE NAMES
 function logFileNames(filePaths) {
   let fileNames = [];
@@ -56,5 +75,5 @@ function appendToFile(filePath, data) {
 
 // Export the function and the array
 module.exports = {
-  readSpecificFiles,
+  readSpecificFiles, writeFileFromPrompt
 };

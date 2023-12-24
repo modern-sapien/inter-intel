@@ -1,12 +1,10 @@
 const OpenAI = require('openai');
 const readline = require('readline');
-const fs = require('fs');
-const path = require('path');
 const config = require('./inter-intel.config.js');
 require('dotenv').config();
 require('colors');
 
-const { readSpecificFiles } = require('./functions/file-functions.js');
+const { readSpecificFiles, writeFileFromPrompt } = require('./functions/file-functions.js');
 const { askQuestion } = require('./functions/chat-functions.js');
 const { aiChatCompletion } = require('./functions/openai-functions.js');
 
