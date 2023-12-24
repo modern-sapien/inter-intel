@@ -2,6 +2,7 @@ const OpenAI = require('openai');
 const readline = require('readline');
 const fs = require('fs');
 const path = require('path');
+const { config } = require('./inter-intel.config.js');
 require('dotenv').config();
 require('colors');
 
@@ -9,7 +10,6 @@ const { readSpecificFiles } = require('./functions/file-functions.js');
 const {
   askQuestion,
   writeContentFile,
-  updateReferenceFiles,
 } = require('./functions/chat-functions.js');
 
 const openai = new OpenAI({
@@ -46,9 +46,8 @@ async function main() {
     }
 
     if (userMessage.startsWith('//')) {
-      console.log('cool guy no gpt');
-
       if (userMessage.startsWith('//readRefs')) {
+        console.log('System message:'.bgYellow);
         console.log('Processing //readReference command...'.yellow);
         const specificFiles = ['./.config.js'];
         const content = readSpecificFiles(specificFiles);
@@ -58,12 +57,12 @@ async function main() {
         });
         const completion = await openai.chat.completions.create({
           messages: messages,
-          model: 'gpt-3.5-turbo',
+          model: config.aiVersion,
         });
-  
+
         const botMessage = completion.choices[0].message.content;
         console.log('chatGPT message:'.bgGreen, botMessage);
-        console.log('----------------'.bgGreen);  
+        console.log('----------------'.bgGreen);
       }
     } else {
       // Regular message processing and interaction with GPT model
@@ -71,7 +70,7 @@ async function main() {
 
       const completion = await openai.chat.completions.create({
         messages: messages,
-        model: 'gpt-3.5-turbo',
+        model: config.aiVersion,
       });
 
       const botMessage = completion.choices[0].message.content;
