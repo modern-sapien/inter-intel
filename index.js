@@ -51,7 +51,6 @@ async function main() {
         currentState,
         ''
       ));
-      x;
       console.log(response.yellow);
     } else if (currentState === 'awaitingFileName') {
       ({ currentState, messages, promptFileName, response } = await handleWriteFile(
@@ -74,7 +73,6 @@ async function main() {
       ));
       console.log(response.yellow);
     } else if (currentState === null && userMessage.toLowerCase() === '//readrefs') {
-    } else if (userMessage.toLowerCase('//readRefs')) {
       console.log('System message:'.bgYellow);
       console.log('Processing //readRefs command...'.yellow);
       const specificFiles = ['./.config.js'];
