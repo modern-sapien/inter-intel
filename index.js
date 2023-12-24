@@ -1,3 +1,5 @@
+// This is the index.js file of inter-intel
+
 const OpenAI = require('openai');
 const readline = require('readline');
 const config = require('./inter-intel.config.js');
@@ -23,7 +25,7 @@ const rl = readline.createInterface({
 
 async function main() {
   // Provides initial context for session
-  const specificFiles = ['./.config.js'];
+  const specificFiles = ['./inter-intel.config.js'];
   let initialContent = readSpecificFiles(specificFiles);
   let messages = [
     {
@@ -68,11 +70,8 @@ async function main() {
       currentState = null; // Reset state after completing the operation
       continue; // Skip to the next iteration
     }
-    
-    if (userMessage.startsWith('//')) {
-      let currentState = null;
 
-      if (userMessage.startsWith('//readRefs')) {
+    if (userMessage.startsWith('//readRefs')) {
         console.log('System message:'.bgYellow);
         console.log('Processing //readRefs command...'.yellow);
         const specificFiles = ['./.config.js'];
@@ -90,7 +89,6 @@ async function main() {
         const botMessage = completion.choices[0].message.content;
         console.log('chatGPT message:'.bgGreen, botMessage);
         console.log('----------------'.bgGreen);
-      }
     } else {
       // Regular message processing and interaction with GPT model
       messages.push({ role: 'user', content: userMessage });
