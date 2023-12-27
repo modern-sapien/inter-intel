@@ -2,8 +2,10 @@ require('dotenv').config();
 
 const config = {
   apiKey: `${process.env.OPENAI_API_KEY}`,
+  // only open ai models for now
   aiVersion: `ONLY_USE_OPENAI_MODEL`,
-  filePaths: ['THIS', 'IS', 'ARRAY', 'OF', 'STRINGS'],
+  // These filepaths are relative to where your config is created
+  filePaths: ['interintelReadMe.md'],
 };
 
 module.exports = config;
