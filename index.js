@@ -76,8 +76,8 @@ async function main() {
     } else if (currentState === null && userMessage.toLowerCase() === '//readrefs') {
       console.log('System message:'.bgYellow);
       console.log('Processing //readRefs command...'.yellow);
-      let specificFiles = readSpecificFiles(configPath);
-      const content = readSpecificFiles(specificFiles);
+
+      let content = readSpecificFiles(configPath);
       messages.push({
         role: 'user',
         content: `please just acknowledge you have read the name and the content of the files I have provided ${content}`,
