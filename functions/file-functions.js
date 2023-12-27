@@ -43,7 +43,8 @@ function writeFileFromPrompt(promptFileName, contentToWrite, baseDir) {
       throw new Error("Invalid file name. Please include a file name with an extension (e.g., 'output.txt').");
     }
     
-    const fullPath = path.join(baseDir, `../interintel/session-samples/${promptFileName}`);
+    const projectRoot = process.cwd();
+    const fullPath = path.join(projectRoot, `interintel/session-samples/${promptFileName}`);
     const directoryPath = path.dirname(fullPath);
 
     if (!fs.existsSync(directoryPath)) {
