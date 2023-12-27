@@ -6,7 +6,7 @@
   },
   "name": "interintel",
   "description": "The application `Interintel` is a command line interface (CLI) application implemented in Node.js. It essentially is an interactive communication tool between the user and an AI model, only openai models for now.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "index.js",
   "directories": {
     "doc": "docs"
