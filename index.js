@@ -2,7 +2,7 @@
 const path = require('path')
 const OpenAI = require('openai');
 const readline = require('readline');
-const configPath = path.join(process.cwd(), 'interintel.config.js');
+const configPath = path.join(__dirname, '../../interintel.config.js');
 const config = require(configPath);
 require('dotenv').config();
 require('colors');
