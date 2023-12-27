@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 // READING FOR INITAL REFERENCE
-function readSpecificFiles(filePaths) {
-  const configFilePath = path.join(__dirname, '../inter-intel.config.js');
+function readSpecificFiles(filePath) {
+  const configFilePath = path.join(__dirname, '../interintel.config.js');
   
   try {
     // Read the content of the config file
@@ -43,7 +43,7 @@ function writeFileFromPrompt(promptFileName, contentToWrite, baseDir) {
       throw new Error("Invalid file name. Please include a file name with an extension (e.g., 'output.txt').");
     }
     
-    const fullPath = path.join(baseDir, `../inter-intel/session-samples/${promptFileName}`);
+    const fullPath = path.join(baseDir, `../interintel/session-samples/${promptFileName}`);
     const directoryPath = path.dirname(fullPath);
 
     if (!fs.existsSync(directoryPath)) {

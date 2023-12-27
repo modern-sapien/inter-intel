@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const configPath = path.join(__dirname, 'interintel.config.js');
+const configPath = path.join(process.cwd(), 'interintel.config.js');
 const templatePath = path.join(__dirname, 'interintel.config.template.js');
 
 if (!fs.existsSync(configPath)) {

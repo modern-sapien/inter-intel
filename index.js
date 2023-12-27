@@ -1,8 +1,9 @@
 // This is the index.js file of inter-intel
-
+const path = require('path')
 const OpenAI = require('openai');
 const readline = require('readline');
-const config = require('./interintel.config.js');
+const configPath = path.join(process.cwd(), 'interintel.config.js');
+const config = require(configPath);
 require('dotenv').config();
 require('colors');
 
@@ -24,8 +25,8 @@ const rl = readline.createInterface({
 
 async function main() {
   // Provides initial context for session
-  const specificFiles = ['./inter-intel.config.js'];
-  let initialContent = readSpecificFiles(specificFiles);
+  // const specificFiles = ['./interintel.config.js'];
+  let initialContent = readSpecificFiles(configPath);
   let messages = [{ role: 'system', content: initialContent }];
 
   let currentState = null;
@@ -102,6 +103,9 @@ async function main() {
 main();
 
 
+exports.main = function() {
+  main()
+}
 exports.printMsg = function() {
   console.log("totally logging dude")
 }
