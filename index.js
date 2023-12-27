@@ -76,7 +76,7 @@ async function main() {
     } else if (currentState === null && userMessage.toLowerCase() === '//readrefs') {
       console.log('System message:'.bgYellow);
       console.log('Processing //readRefs command...'.yellow);
-      const specificFiles = ['./.config.js'];
+      let specificFiles = readSpecificFiles(configPath);
       const content = readSpecificFiles(specificFiles);
       messages.push({
         role: 'user',
