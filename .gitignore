@@ -39,6 +39,7 @@ bower_components
 build/Release
 
 # Dependency directories
+test_package
 node_modules/
 jspm_packages/
 inter-intel/session-samples

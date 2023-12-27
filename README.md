@@ -1,4 +1,4 @@
-## INTER-INTEL
+## INTERINTEL
 
 The application `inter-intel` is a command line interface (CLI) application implemented in Node.js. It essentially is an interactive communication tool between the user and an AI model, only GPTs for now.
 
