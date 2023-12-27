@@ -11,7 +11,6 @@
   "directories": {
     "doc": "docs"
   },
-  "devDependencies": {},
   "scripts": {
     "postinstall": "node setup.js",
     "test": ""
