@@ -2,7 +2,7 @@
 
 const OpenAI = require('openai');
 const readline = require('readline');
-const config = require('./inter-intel.config.js');
+const config = require('./interintel.config.js');
 require('dotenv').config();
 require('colors');
 
