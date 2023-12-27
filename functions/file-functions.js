@@ -2,8 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // READING FOR INITAL REFERENCE
-function readSpecificFiles(filePath) {
-  const configFilePath = filePath;
+function readSpecificFiles(configFilePath) {
   
   try {
     // Read the content of the config file
@@ -12,13 +11,14 @@ function readSpecificFiles(filePath) {
     const config = eval(configContent);
     // Extract the file paths from the config object
     const filePaths = config.filePaths;
-    
+    const configDir = path.dirname(configFilePath);
+
     let allContent = '';
   
     filePaths.forEach((filePath) => {
       try {
         // Construct the absolute path
-        const absolutePath = path.resolve(filePath);
+        const absolutePath = path.resolve(configDir, filePath);
   
         // Read the file content and append it to allContent
         allContent += fs.readFileSync(absolutePath, 'utf8') + '\n';

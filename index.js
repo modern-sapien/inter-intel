@@ -103,9 +103,6 @@ async function main() {
 main();
 
 
-exports.main = function() {
-  main()
-}
 exports.printMsg = function() {
   console.log("totally logging dude")
 }
