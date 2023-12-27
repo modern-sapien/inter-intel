@@ -1,19 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const colors = require('colors')
 
-const configPath = path.join(process.cwd(), 'interintel.config.js');
+const configPath = path.join('../../interintel.config.js');
 const templatePath = path.join(__dirname, 'interintel.config.template.js');
-
-console.log("Current working directory:", process.cwd());
-
-console.log(`Checking for config file at: ${configPath}`);
-
-console.log(fs.existsSync(configPath), "config path exists?")
-
-console.log(`Template file path: ${templatePath}`);
-
-console.log(fs.existsSync(templatePath), "template config path exists?")
-
 
 try {
     if (!fs.existsSync(configPath)) {
@@ -26,3 +16,5 @@ try {
 } catch (error) {
     console.error('Error occurred during setup:', error);
 }
+
+console.log("Finished setup.js script.");
