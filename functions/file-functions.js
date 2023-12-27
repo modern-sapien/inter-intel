@@ -3,7 +3,7 @@ const path = require('path');
 
 // READING FOR INITAL REFERENCE
 function readSpecificFiles(filePath) {
-  const configFilePath = path.join(__dirname, '../interintel.config.js');
+  const configFilePath = filePath;
   
   try {
     // Read the content of the config file
