@@ -3,5 +3,33 @@
     "colors": "^1.4.0",
     "dotenv": "^16.3.1",
     "openai": "^4.24.0"
-  }
+  },
+  "name": "interintel",
+  "description": "The application `inter-intel` is a command line interface (CLI) application implemented in Node.js. It essentially is an interactive communication tool between the user and an AI model, only GPTs for now.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modern-sapien/inter-intel.git"
+  },
+  "keywords": [
+    "testing",
+    "development",
+    "ai",
+    "debugging",
+    "copilot"
+  ],
+  "author": "Modern-Sapien",
+  "license": "SEE LICENSE IN README.md",
+  "bugs": {
+    "url": "https://github.com/modern-sapien/inter-intel/issues"
+  },
+  "homepage": "https://github.com/modern-sapien/inter-intel#readme"
 }

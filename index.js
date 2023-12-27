@@ -100,3 +100,8 @@ async function main() {
 }
 
 main();
+
+
+exports.printMsg = function() {
+  console.log("totally logging dude")
+}
