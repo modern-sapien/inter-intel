@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { aiVersion } = require('../interintel.config.template');
 
 // READING FOR INITAL REFERENCE
 function readSpecificFiles(configFilePath) {
@@ -28,7 +29,7 @@ function readSpecificFiles(configFilePath) {
     });
 
     // Add console.log statements to communicate to the user
-    console.log(`AI sent reference files:`.yellow, `${logFileNames(filePaths)}`.yellow);
+    console.log(`${aiVersion} sent reference files:`.yellow, `${logFileNames(filePaths)}`.yellow);
       return allContent;
   } catch (error) {
     console.error(`Error reading config file: ${error.message}`.bgRed);

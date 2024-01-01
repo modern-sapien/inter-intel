@@ -12,6 +12,7 @@ const { askQuestion } = require('./functions/chat-functions.js');
 const { aiChatCompletion } = require('./functions/openai-functions.js');
 
 const { handleWriteFile } = require('./functions/handleWriteFile.js');
+const { aiVersion } = require('./interintel.config.template.js');
 
 const openai = new OpenAI({
   apiKey: config.apiKey,
@@ -85,7 +86,7 @@ async function main() {
       const completion = await aiChatCompletion(openai, messages, config.aiVersion);
 
       const botMessage = completion.choices[0].message.content;
-      console.log('chatGPT message:'.bgGreen, botMessage);
+      console.log(`${aiVersion}`.bgGreen, botMessage);
       console.log('----------------'.bgGreen);
     } else {
       // Regular message processing and interaction with GPT model
@@ -94,7 +95,7 @@ async function main() {
       const completion = await aiChatCompletion(openai, messages, config.aiVersion);
 
       const botMessage = completion.choices[0].message.content;
-      console.log('chatGPT message:'.bgGreen, botMessage);
+      console.log(`${aiVersion}`.bgGreen, botMessage);
       console.log('----------------'.bgGreen);
     }
   }

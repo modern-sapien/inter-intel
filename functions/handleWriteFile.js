@@ -1,5 +1,6 @@
 const { aiChatCompletion } = require('./openai-functions.js');
 const { writeFileFromPrompt } = require('./file-functions.js');
+const { aiVersion } = require('../interintel.config.template.js');
 
 async function handleWriteFile(openai, config, messages, currentState, userInput, promptFileName) {
   let contentToWrite = '';
@@ -10,7 +11,7 @@ async function handleWriteFile(openai, config, messages, currentState, userInput
   } else if (currentState === 'awaitingFileName') {
     promptFileName = userInput;
     currentState = 'awaitingGPTPrompt';
-    return { currentState, messages, promptFileName, response: 'Please provide a prompt for the AI:' };
+    return { currentState, messages, promptFileName, response: `Please provide a prompt for ${aiVersion}:` };
   } else if (currentState === 'awaitingGPTPrompt') {
     const promptForGPT = userInput;
     try {
