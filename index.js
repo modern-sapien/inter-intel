@@ -100,9 +100,6 @@ async function main() {
   }
 }
 
-exports.printMsg = function() {
-  console.log("totally logging dude")
-}
 exports.main = function() {
   main()
 }
