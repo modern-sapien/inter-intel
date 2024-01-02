@@ -6,7 +6,7 @@ const configPath = path.join('../../interintel.config.js');
 const templatePath = path.join(__dirname, '/resources/interintel.config.template.js');
 
 const readMePath = path.join('../../interintel/interintelReadMe.md');
-const readMeTemplate = path.join(__dirname, '/interintel/README.md');
+const readMeTemplate = path.join(__dirname, '/README.md');
 
 // Creating directory to hold onto assets
 try {
