@@ -6,7 +6,7 @@ Here's a brief overview of the main functionalities, as contained in the index.j
 
 - The application starts an interactive session with the user. It does this by invoking the readline module, which reads user inputs line by line from the terminal.
 
--- node index.js will start the app
+-- 'node index.js' will start the app
   
 - The OpenAI's API is accessed using API keys, and the version of AI being used is specified via a config. 
 

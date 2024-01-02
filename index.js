@@ -24,14 +24,11 @@ const rl = readline.createInterface({
 });
 
 async function main() {
-  // Provides initial context for session
-  // const specificFiles = ['./interintel.config.js'];
   let initialContent = readSpecificFiles(configPath);
   let messages = [{ role: 'system', content: initialContent }];
 
   let currentState = null;
   let promptFileName = '';
-  let contentToWrite = '';
 
   while (true) {
     const userMessage = await askQuestion(rl, 'You: '.blue.bold);

@@ -3,10 +3,10 @@ const path = require('path');
 const colors = require('colors')
 
 const configPath = path.join('../../interintel.config.js');
-const templatePath = path.join(__dirname, 'interintel.config.template.js');
+const templatePath = path.join(__dirname, '../resources/interintel.config.template.js');
 
 const readMePath = path.join('../../interintelReadMe.md');
-const readMeTemplate = path.join(__dirname, 'README.md');
+const readMeTemplate = path.join(__dirname, '../resources/README.md');
 
 try {
     if (!fs.existsSync(configPath)) {
