@@ -7,12 +7,11 @@ const config = require(configPath);
 require('dotenv').config();
 require('colors');
 
-const { readSpecificFiles, writeFileFromPrompt } = require('./functions/file-functions.js');
+const { readSpecificFiles } = require('./functions/file-functions.js');
 const { askQuestion } = require('./functions/chat-functions.js');
 const { aiChatCompletion } = require('./functions/openai-functions.js');
 
 const { handleWriteFile } = require('./functions/handleWriteFile.js');
-const { aiVersion } = require('./interintel.config.template.js');
 
 const openai = new OpenAI({
   apiKey: config.apiKey,
@@ -86,7 +85,7 @@ async function main() {
       const completion = await aiChatCompletion(openai, messages, config.aiVersion);
 
       const botMessage = completion.choices[0].message.content;
-      console.log(`${aiVersion}`.bgGreen, botMessage);
+      console.log(`${config.aiVersion}`.bgGreen, botMessage);
       console.log('----------------'.bgGreen);
     } else {
       // Regular message processing and interaction with GPT model
@@ -95,11 +94,13 @@ async function main() {
       const completion = await aiChatCompletion(openai, messages, config.aiVersion);
 
       const botMessage = completion.choices[0].message.content;
-      console.log(`${aiVersion}`.bgGreen, botMessage);
+      console.log(`${config.aiVersion}`.bgGreen, botMessage);
       console.log('----------------'.bgGreen);
     }
   }
 }
+
+main()
 
 exports.main = function() {
   main()

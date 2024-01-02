@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { aiVersion } = require('../interintel.config.template');
+const { aiVersion } = require('../interintel.config');
 
 // READING FOR INITAL REFERENCE
 function readSpecificFiles(configFilePath) {
