@@ -5,9 +5,17 @@ const colors = require('colors')
 const configPath = path.join('../../interintel.config.js');
 const templatePath = path.join(__dirname, '/resources/interintel.config.template.js');
 
-const readMePath = path.join('../../interintelReadMe.md');
+const readMePath = path.join('../../interintel/interintelReadMe.md');
 const readMeTemplate = path.join(__dirname, '/interintel/README.md');
 
+// Creating directory to hold onto assets
+try {
+    fs.mkdirSync('../../interintel')
+} catch (error) {
+    console.log('Error occurred during setup:', error)
+}
+
+// Cloning config outside of node_modules and where root typically is
 try {
     if (!fs.existsSync(configPath)) {
         console.log('Config file does not exist, creating...');
@@ -21,7 +29,7 @@ try {
     console.error('Error occurred during setup:', error);
 }
 
-
+// Cloning README outside of node_modules and where root typically is
 try {
     if (!fs.existsSync(readMePath)) {
         console.log('Readme file does not exist, creating...');
