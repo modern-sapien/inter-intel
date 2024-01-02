@@ -5,7 +5,7 @@ const config = {
   // only open ai models for now
   aiVersion: `ONLY_USE_OPENAI_MODEL`,
   // These filepaths are relative to where your config is created
-  filePaths: ['interintelReadMe.md'],
+  filePaths: ['interintel/interintelReadMe.md'],
 };
 
 module.exports = config;

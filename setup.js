@@ -6,7 +6,7 @@ const configPath = path.join('../../interintel.config.js');
 const templatePath = path.join(__dirname, '/resources/interintel.config.template.js');
 
 const readMePath = path.join('../../interintelReadMe.md');
-const readMeTemplate = path.join(__dirname, '/README.md');
+const readMeTemplate = path.join(__dirname, '/interintel/README.md');
 
 try {
     if (!fs.existsSync(configPath)) {
