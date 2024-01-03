@@ -1,5 +1,3 @@
-const OpenAI = require('openai');
-
 async function aiChatCompletion(openai, messages, model) {
   try {
     const response = await openai.chat.completions.create({

@@ -1,4 +1,3 @@
-// This is the index.js file of inter-intel
 const path = require('path')
 const OpenAI = require('openai');
 const readline = require('readline');
@@ -10,7 +9,6 @@ require('colors');
 const { readSpecificFiles } = require('./functions/file-functions.js');
 const { askQuestion } = require('./functions/chat-functions.js');
 const { aiChatCompletion } = require('./functions/openai-functions.js');
-
 const { handleWriteFile } = require('./functions/handleWriteFile.js');
 
 const openai = new OpenAI({
@@ -96,8 +94,6 @@ async function main() {
     }
   }
 }
-
-main()
 
 exports.main = function() {
   main()

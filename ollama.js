@@ -3,20 +3,24 @@ const fetch = require('node-fetch');
 let ai = 'ollama';
 let messages = [
   {
+    role: 'assistant',
+    content: 'please use a respectful tone',
+  },
+  {
+    role: 'assistant',
+    content: 'when asked for a code reference, please provide only the code with no commentary or explanation just the code. No commentary or explanation. NO COMMENTARY OR EXPLANATION',
+  },
+  {
     role: 'user',
-    content: 'please share our conversation history',
+    content: 'how can I most effectively persist chat history with you? Is every conversation then dependent on a finding a way to persist history by sending along the ongoing chat for you to continually reference context?',
   },
 ];
-let model = 'llama2';
+let model = 'mistral';
 
 async function ollamaChatCompletion(ai, messages, model) {
   if (ai === 'ollama') {
-    // Transform messages into the templated format required by Ollama
-    const templatedHistory = messages.map((msg, index) => 
-      `[INST] ${msg.role}: ${msg.content} [/INST]`).join(' ');
-
     let data = {
-      template: templatedHistory,
+      messages,
       model,
       stream: false,
     };
