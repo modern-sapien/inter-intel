@@ -1,10 +1,11 @@
 const path = require('path');
 const { aiChatCompletion } = require('./openai-functions.js');
+const chatCompletion = require('../ollama.js');
 const { writeFileFromPrompt } = require('./file-functions.js');
 const configPath = path.join(process.cwd(), 'interintel.config.js');
 const config = require(configPath);
 
-async function handleWriteFile(openai, config, messages, currentState, userInput, promptFileName) {
+async function handleWriteFile(config, messages, currentState, userInput, promptFileName) {
   let contentToWrite = '';
 
   if (currentState === null) {
@@ -17,22 +18,31 @@ async function handleWriteFile(openai, config, messages, currentState, userInput
     };
   } else if (currentState === 'awaitingFileName') {
     promptFileName = userInput;
-    currentState = 'awaitingGPTPrompt';
+    currentState = 'awaitingAIprompt';
     return {
       currentState,
       messages,
       promptFileName,
       response: `Please provide a prompt for ${config.aiVersion}:`,
     };
-  } else if (currentState === 'awaitingGPTPrompt') {
-    const promptForGPT = userInput;
+  } else if (currentState === 'awaitingAIprompt') {
+    const promptForAI = userInput;
     try {
-      let gptResponse = await aiChatCompletion(
-        openai,
-        [{ role: 'user', content: promptForGPT }],
+      let completionResponse = await chatCompletion(
+        config.aiService,
+        [{ role: 'user', content: promptForAI }],
         config.aiVersion
       );
-      contentToWrite = gptResponse.choices[0].message.content;
+
+      let contentToWrite;
+      if (config.aiService === 'openai') {
+        contentToWrite = completionResponse.choices[0].message.content;
+      } else if (config.aiService === 'ollama') {
+        // Adjust this based on how Ollama's response is structured
+        console.log(config.aiService, 'aisservice')
+        contentToWrite = completionResponse;
+      }
+
       await writeFileFromPrompt(promptFileName, contentToWrite, __dirname); // Assuming this function handles file writing
 
       currentState = null; // Reset state after completing the operation

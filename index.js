@@ -8,7 +8,6 @@ require('colors');
 
 const { readSpecificFiles } = require('./functions/file-functions.js');
 const { askQuestion } = require('./functions/chat-functions.js');
-const { aiChatCompletion } = require('./functions/openai-functions.js');
 const { handleWriteFile } = require('./functions/handleWriteFile.js');
 const chatCompletion = require('./ollama.js');
 
@@ -37,7 +36,6 @@ async function main() {
 
     if (userMessage.toLowerCase().startsWith('//writefile') && currentState === null) {
       ({ currentState, messages, promptFileName, response } = await handleWriteFile(
-        openai,
         config,
         messages,
         currentState,
@@ -46,7 +44,6 @@ async function main() {
       console.log(response.yellow);
     } else if (currentState === 'awaitingFileName') {
       ({ currentState, messages, promptFileName, response } = await handleWriteFile(
-        openai,
         config,
         messages,
         currentState,
@@ -54,9 +51,8 @@ async function main() {
         promptFileName
       ));
       console.log(response.yellow);
-    } else if (currentState === 'awaitingGPTPrompt') {
+    } else if (currentState === 'awaitingAIprompt') {
       ({ currentState, messages, promptFileName, response } = await handleWriteFile(
-        openai,
         config,
         messages,
         currentState,
@@ -71,7 +67,7 @@ async function main() {
       let content = readSpecificFiles(configPath);
       messages.push({
         role: 'user',
-        content: `please just acknowledge you have read the name and the content of the files I have provided ${content}`,
+        content: `please just acknowledge you have read the name and the content of the files I have provided. once you have done this a single time you do not need to do it again. ${content}`,
       });
       const completion = await chatCompletion(config.aiService, messages, config.aiVersion);
 
