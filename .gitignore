@@ -1,5 +1,5 @@
 .DS_Store
-
+./interintel/session-samples
 # Logs
 logs
 *.log

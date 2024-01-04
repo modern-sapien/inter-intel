@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 const OpenAI = require('openai');
 const readline = require('readline');
 const configPath = path.join(process.cwd(), 'interintel.config.js');
@@ -10,11 +10,7 @@ const { readSpecificFiles } = require('./functions/file-functions.js');
 const { askQuestion } = require('./functions/chat-functions.js');
 const { aiChatCompletion } = require('./functions/openai-functions.js');
 const { handleWriteFile } = require('./functions/handleWriteFile.js');
-
-const openai = new OpenAI({
-  apiKey: config.apiKey,
-  model: config.aiVersion,
-});
+const chatCompletion = require('./ollama.js');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -30,7 +26,7 @@ async function main() {
 
   while (true) {
     const userMessage = await askQuestion(rl, 'You: '.blue.bold);
-    let response = ''; // Add a variable to capture the response message
+    let response = '';
 
     // Exit condition
     if (userMessage.toLowerCase() === 'exit') {
@@ -77,25 +73,36 @@ async function main() {
         role: 'user',
         content: `please just acknowledge you have read the name and the content of the files I have provided ${content}`,
       });
-      const completion = await aiChatCompletion(openai, messages, config.aiVersion);
+      const completion = await chatCompletion(config.aiService, messages, config.aiVersion);
 
-      const botMessage = completion.choices[0].message.content;
-      console.log(`${config.aiVersion}`.bgGreen, botMessage);
-      console.log('----------------'.bgGreen);
+      let botMessage;
+
+      if (config.aiService === 'openai') {
+        botMessage = completion.choices[0].message.content;
+      } else if (config.aiService === 'ollama') {
+        // Adjust this line based on how Ollama's response is structured
+        botMessage = completion;
+      }
     } else {
       // Regular message processing and interaction with GPT model
       messages.push({ role: 'user', content: userMessage });
 
-      const completion = await aiChatCompletion(openai, messages, config.aiVersion);
+      const completion = await chatCompletion(config.aiService, messages, config.aiVersion);
 
-      const botMessage = completion.choices[0].message.content;
-      console.log(`${config.aiVersion}`.bgGreen, botMessage);
+      let botMessage;
+      if (config.aiService === 'openai') {
+        botMessage = completion.choices[0].message.content;
+      } else if (config.aiService === 'ollama') {
+        // Adjust based on Ollama's response format
+        botMessage = completion; // Example - replace with actual response structure for Ollama
+      }
+
+      console.log(`${config.aiVersion}`.bgGreen, botMessage.green);
       console.log('----------------'.bgGreen);
     }
   }
 }
 
-exports.main = function() {
-  main()
-}
-
+exports.main = function () {
+  main();
+};
