@@ -1,5 +1,4 @@
 const path = require('path');
-const OpenAI = require('openai');
 const readline = require('readline');
 const configPath = path.join(process.cwd(), 'interintel.config.js');
 const config = require(configPath);
@@ -35,12 +34,13 @@ async function main() {
     }
 
     if (userMessage.toLowerCase().startsWith('//writefile') && currentState === null) {
-      ({ currentState, messages, promptFileName, response } = await handleWriteFile(
+      let result = await handleWriteFile(
         config,
         messages,
         currentState,
         ''
-      ));
+      );
+      ({ currentState, messages, promptFileName, response } = result); // Update messages array
       console.log(response.yellow);
     } else if (currentState === 'awaitingFileName') {
       ({ currentState, messages, promptFileName, response } = await handleWriteFile(

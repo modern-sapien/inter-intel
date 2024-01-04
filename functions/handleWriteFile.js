@@ -1,9 +1,5 @@
-const path = require('path');
-const { aiChatCompletion } = require('./openai-functions.js');
 const chatCompletion = require('../ollama.js');
 const { writeFileFromPrompt } = require('./file-functions.js');
-const configPath = path.join(process.cwd(), 'interintel.config.js');
-const config = require(configPath);
 
 async function handleWriteFile(config, messages, currentState, userInput, promptFileName) {
   let contentToWrite = '';
@@ -27,28 +23,26 @@ async function handleWriteFile(config, messages, currentState, userInput, prompt
     };
   } else if (currentState === 'awaitingAIprompt') {
     const promptForAI = userInput;
+
+    let updatedMessages = [...messages, { role: 'user', content: promptForAI }];
+
     try {
       let completionResponse = await chatCompletion(
         config.aiService,
-        [{ role: 'user', content: promptForAI }],
+        updatedMessages,
         config.aiVersion
       );
 
-      let contentToWrite;
-      if (config.aiService === 'openai') {
-        contentToWrite = completionResponse.choices[0].message.content;
-      } else if (config.aiService === 'ollama') {
-        // Adjust this based on how Ollama's response is structured
-        console.log(config.aiService, 'aisservice')
-        contentToWrite = completionResponse;
-      }
+      // Extract the response content
+      let contentToWrite = (config.aiService === 'openai') ? 
+        completionResponse.choices[0].message.content : completionResponse;
 
       await writeFileFromPrompt(promptFileName, contentToWrite, __dirname); // Assuming this function handles file writing
 
       currentState = null; // Reset state after completing the operation
       return {
         currentState,
-        messages,
+        messages: updatedMessages,
         promptFileName,
         contentToWrite,
         response: `Content written to ${promptFileName}`.yellow,
@@ -57,7 +51,7 @@ async function handleWriteFile(config, messages, currentState, userInput, prompt
       console.error('Error in handleWriteFile:', error);
       return {
         currentState,
-        messages,
+        messages: updatedMessages, // Return the updated messages array
         promptFileName,
         contentToWrite,
         response: 'An error occurred while writing the file.',

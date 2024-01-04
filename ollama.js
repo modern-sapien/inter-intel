@@ -23,8 +23,6 @@ async function chatCompletion(aiService, messages, model) {
     let response;
 
     if (aiService === 'openai') {
-      console.log('openai service');
-
       response = await openai.chat.completions.create({
         messages: messages,
         model: model,
@@ -39,8 +37,6 @@ async function chatCompletion(aiService, messages, model) {
         model,
         stream: false,
       };
-
-      console.log(data.messages, 'messages');
       const fetchResponse = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
         headers: {
