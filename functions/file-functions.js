@@ -14,15 +14,18 @@ function readSpecificFiles(configFilePath) {
     const filePaths = config.filePaths;
     const configDir = path.dirname(configFilePath);
 
-    let allContent = '';
+    let allContent = 'I am sharing information from my file system for reference in our chat.\n';
   
     filePaths.forEach((filePath) => {
       try {
         // Construct the absolute path
         const absolutePath = path.resolve(configDir, filePath);
+        const fileContent = fs.readFileSync(absolutePath, 'utf8');
+
+
   
-        // Read the file content and append it to allContent
-        allContent += fs.readFileSync(absolutePath, 'utf8') + '\n';
+        // Read the file content and add it to allContent
+        allContent += `\nStart File Name: ${filePath}\n File Content:\n${fileContent}\n End File Name: ${filePath}`;
       } catch (error) {
         console.error(`Error reading file ${filePath}: ${error.message}`.bgRed);
       }

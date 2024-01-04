@@ -1,10 +1,7 @@
-const path = require('path');
-const { aiChatCompletion } = require('./openai-functions.js');
+const chatCompletion = require('../ollama.js');
 const { writeFileFromPrompt } = require('./file-functions.js');
-const configPath = path.join(process.cwd(), 'interintel.config.js');
-const config = require(configPath);
 
-async function handleWriteFile(openai, config, messages, currentState, userInput, promptFileName) {
+async function handleWriteFile(config, messages, currentState, userInput, promptFileName) {
   let contentToWrite = '';
 
   if (currentState === null) {
@@ -17,28 +14,35 @@ async function handleWriteFile(openai, config, messages, currentState, userInput
     };
   } else if (currentState === 'awaitingFileName') {
     promptFileName = userInput;
-    currentState = 'awaitingGPTPrompt';
+    currentState = 'awaitingAIprompt';
     return {
       currentState,
       messages,
       promptFileName,
       response: `Please provide a prompt for ${config.aiVersion}:`,
     };
-  } else if (currentState === 'awaitingGPTPrompt') {
-    const promptForGPT = userInput;
+  } else if (currentState === 'awaitingAIprompt') {
+    const promptForAI = userInput;
+
+    let updatedMessages = [...messages, { role: 'user', content: promptForAI }];
+
     try {
-      let gptResponse = await aiChatCompletion(
-        openai,
-        [{ role: 'user', content: promptForGPT }],
+      let completionResponse = await chatCompletion(
+        config.aiService,
+        updatedMessages,
         config.aiVersion
       );
-      contentToWrite = gptResponse.choices[0].message.content;
+
+      // Extract the response content
+      let contentToWrite = (config.aiService === 'openai') ? 
+        completionResponse.choices[0].message.content : completionResponse;
+
       await writeFileFromPrompt(promptFileName, contentToWrite, __dirname); // Assuming this function handles file writing
 
       currentState = null; // Reset state after completing the operation
       return {
         currentState,
-        messages,
+        messages: updatedMessages,
         promptFileName,
         contentToWrite,
         response: `Content written to ${promptFileName}`.yellow,
@@ -47,7 +51,7 @@ async function handleWriteFile(openai, config, messages, currentState, userInput
       console.error('Error in handleWriteFile:', error);
       return {
         currentState,
-        messages,
+        messages: updatedMessages, // Return the updated messages array
         promptFileName,
         contentToWrite,
         response: 'An error occurred while writing the file.',
