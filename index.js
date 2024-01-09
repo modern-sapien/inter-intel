@@ -97,5 +97,3 @@ async function main() {
 }
 
 export { main };
-
-main();
