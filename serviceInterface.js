@@ -1,22 +1,24 @@
-const path = require('path');
-const fetch = require('node-fetch');
-const OpenAI = require('openai');
+import path from 'path';
+import fetch from 'node-fetch';
+import OpenAI from 'openai';
+import MistralClient from '@mistralai/mistralai';
+
 const configPath = path.join(process.cwd(), 'interintel.config.js');
-const config = require(configPath);
+
+let config;
+try {
+  const importedModule = await import(configPath);
+  config = importedModule.default;
+} catch (error) {
+  console.error('Failed to import config:', error);
+}
+
+const mistralClient = new MistralClient(config.apiKey);
 
 const openai = new OpenAI({
   apiKey: config.apiKey,
   model: config.aiVersion,
 });
-
-let ai = 'ollama';
-let messages = [
-  {
-    role: 'assistant',
-    content: 'please use a respectful tone',
-  },
-];
-let model = 'mistral';
 
 async function chatCompletion(aiService, messages, model) {
   try {
@@ -30,6 +32,16 @@ async function chatCompletion(aiService, messages, model) {
       });
 
       return response;
+      
+    } else if (aiService === 'mistral') {
+      let chatResponse;
+
+      chatResponse = await mistralClient.chat({
+        model: model, // or a specific model you wish to use
+        messages: messages,
+      });
+
+      return chatResponse;
     } else if (aiService === 'ollama') {
       // Ollama specific code
       let data = {
@@ -57,4 +69,4 @@ async function chatCompletion(aiService, messages, model) {
   }
 }
 
-module.exports = chatCompletion;
+export { chatCompletion };

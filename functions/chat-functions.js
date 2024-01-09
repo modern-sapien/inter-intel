@@ -6,6 +6,5 @@ async function askQuestion(rl, prompt) {
   });
 }
 
-module.exports = {
-  askQuestion,
-}
+export { askQuestion };
+

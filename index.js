@@ -1,14 +1,16 @@
-const path = require('path');
-const readline = require('readline');
+import path from 'path';
+import readline from 'readline';
+import dotenv from 'dotenv';
+import colors from 'colors';
 const configPath = path.join(process.cwd(), 'interintel.config.js');
-const config = require(configPath);
-require('dotenv').config();
-require('colors');
 
-const { readSpecificFiles } = require('./functions/file-functions.js');
-const { askQuestion } = require('./functions/chat-functions.js');
-const { handleWriteFile } = require('./functions/handleWriteFile.js');
-const chatCompletion = require('./ollama.js');
+import config from './interintel.config.js';
+import { readSpecificFiles } from './functions/file-functions.js';
+import { askQuestion } from './functions/chat-functions.js';
+import { handleWriteFile } from './functions/handleWriteFile.js';
+import { chatCompletion } from './serviceInterface.js';
+
+dotenv.config();
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -16,7 +18,7 @@ const rl = readline.createInterface({
 });
 
 async function main() {
-  let initialContent = readSpecificFiles(configPath);
+  let initialContent = await readSpecificFiles(configPath);
   let messages = [{ role: 'system', content: initialContent }];
 
   let currentState = null;
@@ -34,12 +36,7 @@ async function main() {
     }
 
     if (userMessage.toLowerCase().startsWith('//writefile') && currentState === null) {
-      let result = await handleWriteFile(
-        config,
-        messages,
-        currentState,
-        ''
-      );
+      let result = await handleWriteFile(config, messages, currentState, '');
       ({ currentState, messages, promptFileName, response } = result); // Update messages array
       console.log(response.yellow);
     } else if (currentState === 'awaitingFileName') {
@@ -71,9 +68,9 @@ async function main() {
       });
       const completion = await chatCompletion(config.aiService, messages, config.aiVersion);
 
-      let botMessage;
+      let botMessage = '';
 
-      if (config.aiService === 'openai') {
+      if (config.aiService === 'openai' || config.aiService === 'mistral') {
         botMessage = completion.choices[0].message.content;
       } else if (config.aiService === 'ollama') {
         // Adjust this line based on how Ollama's response is structured
@@ -86,7 +83,7 @@ async function main() {
       const completion = await chatCompletion(config.aiService, messages, config.aiVersion);
 
       let botMessage;
-      if (config.aiService === 'openai') {
+      if (config.aiService === 'openai' || config.aiService === 'mistral') {
         botMessage = completion.choices[0].message.content;
       } else if (config.aiService === 'ollama') {
         // Adjust based on Ollama's response format
@@ -99,6 +96,6 @@ async function main() {
   }
 }
 
-exports.main = function () {
-  main();
-};
+export { main };
+
+main();
