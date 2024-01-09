@@ -1,52 +1,50 @@
-const fs = require('fs');
-const path = require('path');
-const { aiVersion } = require('../interintel.config');
+import fs from 'fs';
+import path from 'path';
 
 // READING FOR INITAL REFERENCE
-function readSpecificFiles(configFilePath) {
-  
+async function readSpecificFiles(configFilePath) {
   try {
-    // Read the content of the config file
-    const configContent = fs.readFileSync(configFilePath, 'utf8');    
-    // Parse the config file content as JavaScript
-    const config = eval(configContent);
-    // Extract the file paths from the config object
-    const filePaths = config.filePaths;
-    const configDir = path.dirname(configFilePath);
+    // Dynamically import the config file
+    const absoluteConfigPath = path.resolve(configFilePath);
+    const configModule = await import('file://' + absoluteConfigPath);
+    const config = configModule.default;
 
+    const filePaths = config.filePaths;
     let allContent = 'I am sharing information from my file system for reference in our chat.\n';
-  
-    filePaths.forEach((filePath) => {
+
+    for (const filePath of filePaths) {
       try {
         // Construct the absolute path
-        const absolutePath = path.resolve(configDir, filePath);
+        const absolutePath = path.resolve(process.cwd(), filePath);
         const fileContent = fs.readFileSync(absolutePath, 'utf8');
 
-
-  
         // Read the file content and add it to allContent
         allContent += `\nStart File Name: ${filePath}\n File Content:\n${fileContent}\n End File Name: ${filePath}`;
       } catch (error) {
-        console.error(`Error reading file ${filePath}: ${error.message}`.bgRed);
+        console.error(`Error reading file ${filePath}: ${error.message}`);
       }
-    });
+    }
 
     // Add console.log statements to communicate to the user
-    console.log(`${aiVersion} sent reference files:`.yellow, `${logFileNames(filePaths)}`.yellow);
-      return allContent;
+    console.log(
+      `${config.aiVersion} sent reference files:`.yellow,
+      `${logFileNames(filePaths)}`.yellow
+    );
+    return allContent;
   } catch (error) {
-    console.error(`Error reading config file: ${error.message}`.bgRed);
+    console.error(`Error reading config file: ${error.message}`);
     return '';
   }
 }
 
 function writeFileFromPrompt(promptFileName, contentToWrite, baseDir) {
   try {
-
     if (!promptFileName.includes('.')) {
-      throw new Error("Invalid file name. Please include a file name with an extension (e.g., 'output.txt').");
+      throw new Error(
+        "Invalid file name. Please include a file name with an extension (e.g., 'output.txt')."
+      );
     }
-    
+
     const projectRoot = process.cwd();
     const fullPath = path.join(projectRoot, `interintel/session-samples/${promptFileName}`);
     const directoryPath = path.dirname(fullPath);
@@ -58,7 +56,6 @@ function writeFileFromPrompt(promptFileName, contentToWrite, baseDir) {
     fs.writeFileSync(fullPath, contentToWrite + '\n');
     console.log(`Content written to ${fullPath}`.yellow);
     return true;
-
   } catch (error) {
     console.error(`Error writing file: ${error.message}`.bgRed);
     return false;
@@ -69,7 +66,7 @@ function writeFileFromPrompt(promptFileName, contentToWrite, baseDir) {
 function logFileNames(filePaths) {
   let fileNames = [];
 
-  console.log("")
+  console.log('');
   console.log(`System message`.bgYellow + `: `.yellow);
   filePaths.forEach((filePath) => {
     const fileName = path.basename(filePath);
@@ -84,6 +81,4 @@ function appendToFile(filePath, data) {
 }
 
 // Export the function and the array
-module.exports = {
-  readSpecificFiles, writeFileFromPrompt
-};
+export { readSpecificFiles, writeFileFromPrompt };

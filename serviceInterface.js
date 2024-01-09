@@ -1,8 +1,16 @@
-const path = require('path');
-const fetch = require('node-fetch');
-const OpenAI = require('openai');
+import path from 'path';
+import fetch from 'node-fetch';
+import OpenAI from 'openai';
+
 const configPath = path.join(process.cwd(), 'interintel.config.js');
-const config = require(configPath);
+
+let config;
+try {
+  const importedModule = await import(configPath);
+  config = importedModule.default;
+} catch (error) {
+  console.error('Failed to import config:', error);
+}
 
 const openai = new OpenAI({
   apiKey: config.apiKey,
@@ -57,4 +65,4 @@ async function chatCompletion(aiService, messages, model) {
   }
 }
 
-module.exports = chatCompletion;
+export { chatCompletion };

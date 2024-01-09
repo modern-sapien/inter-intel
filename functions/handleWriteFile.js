@@ -1,5 +1,7 @@
-const chatCompletion = require('../serviceInterface.js');
-const { writeFileFromPrompt } = require('./file-functions.js');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { chatCompletion } from '../serviceInterface.js';
+import { writeFileFromPrompt } from './file-functions.js';
 
 async function handleWriteFile(config, messages, currentState, userInput, promptFileName) {
   let contentToWrite = '';
@@ -39,6 +41,8 @@ async function handleWriteFile(config, messages, currentState, userInput, prompt
           ? completionResponse.choices[0].message.content
           : completionResponse;
 
+      const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
       await writeFileFromPrompt(promptFileName, contentToWrite, __dirname); // Assuming this function handles file writing
 
       currentState = null; // Reset state after completing the operation
@@ -65,4 +69,4 @@ async function handleWriteFile(config, messages, currentState, userInput, prompt
   return { currentState, messages, promptFileName, contentToWrite, response: '' };
 }
 
-module.exports = { handleWriteFile };
+export { handleWriteFile };

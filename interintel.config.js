@@ -1,10 +1,11 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const config = {
   apiKey: `${process.env.OPENAI_API_KEY}`,
   aiService: 'ollama',
   aiVersion: `mistral`,
-  filePaths: ['ollama.js', './README.md'],
+  filePaths: ['serviceInterface.js'],
 };
 
-module.exports = config;
+export default config;
