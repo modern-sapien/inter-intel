@@ -1,4 +1,4 @@
-const chatCompletion = require('../ollama.js');
+const chatCompletion = require('../serviceInterface.js');
 const { writeFileFromPrompt } = require('./file-functions.js');
 
 async function handleWriteFile(config, messages, currentState, userInput, promptFileName) {
@@ -34,8 +34,10 @@ async function handleWriteFile(config, messages, currentState, userInput, prompt
       );
 
       // Extract the response content
-      let contentToWrite = (config.aiService === 'openai') ? 
-        completionResponse.choices[0].message.content : completionResponse;
+      let contentToWrite =
+        config.aiService === 'openai'
+          ? completionResponse.choices[0].message.content
+          : completionResponse;
 
       await writeFileFromPrompt(promptFileName, contentToWrite, __dirname); // Assuming this function handles file writing
 

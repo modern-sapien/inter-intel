@@ -8,7 +8,7 @@ require('colors');
 const { readSpecificFiles } = require('./functions/file-functions.js');
 const { askQuestion } = require('./functions/chat-functions.js');
 const { handleWriteFile } = require('./functions/handleWriteFile.js');
-const chatCompletion = require('./ollama.js');
+const chatCompletion = require('./serviceInterface.js');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -34,12 +34,7 @@ async function main() {
     }
 
     if (userMessage.toLowerCase().startsWith('//writefile') && currentState === null) {
-      let result = await handleWriteFile(
-        config,
-        messages,
-        currentState,
-        ''
-      );
+      let result = await handleWriteFile(config, messages, currentState, '');
       ({ currentState, messages, promptFileName, response } = result); // Update messages array
       console.log(response.yellow);
     } else if (currentState === 'awaitingFileName') {
@@ -102,3 +97,4 @@ async function main() {
 exports.main = function () {
   main();
 };
+main();
