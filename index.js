@@ -70,7 +70,7 @@ async function main() {
 
       let botMessage = '';
 
-      if (config.aiService === 'openai') {
+      if (config.aiService === 'openai' || config.aiService === 'mistral') {
         botMessage = completion.choices[0].message.content;
       } else if (config.aiService === 'ollama') {
         // Adjust this line based on how Ollama's response is structured
@@ -83,7 +83,7 @@ async function main() {
       const completion = await chatCompletion(config.aiService, messages, config.aiVersion);
 
       let botMessage;
-      if (config.aiService === 'openai') {
+      if (config.aiService === 'openai' || config.aiService === 'mistral') {
         botMessage = completion.choices[0].message.content;
       } else if (config.aiService === 'ollama') {
         // Adjust based on Ollama's response format

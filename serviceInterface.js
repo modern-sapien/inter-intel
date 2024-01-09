@@ -13,10 +13,7 @@ try {
   console.error('Failed to import config:', error);
 }
 
-let mistralClient;
-if (config.aiService === 'mistral') {
-  mistralClient = new MistralClient(config.apiKey);
-}
+const mistralClient = new MistralClient(config.apiKey);
 
 const openai = new OpenAI({
   apiKey: config.apiKey,
@@ -35,6 +32,7 @@ async function chatCompletion(aiService, messages, model) {
       });
 
       return response;
+      
     } else if (aiService === 'mistral') {
       let chatResponse;
 
