@@ -3,9 +3,11 @@ dotenv.config();
 
 const config = {
   apiKey: `${process.env.MISTRAL_API_KEY}`,
-  aiService: 'mistral',
-  aiVersion: `mistral-tiny`,
-  filePaths: ['serviceInterface.js'],
+  aiService: 'ollama',
+  aiVersion: `mistral:instruct`,
+  filePaths: [
+    'resources/reference.txt'  
+  ],
 };
 
 export default config;
