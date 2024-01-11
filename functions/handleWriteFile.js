@@ -37,7 +37,7 @@ async function handleWriteFile(config, messages, currentState, userInput, prompt
 
       // Extract the response content
       let contentToWrite =
-        config.aiService === 'openai'
+        config.aiService === 'openai' || config.aiService === 'mistral'
           ? completionResponse.choices[0].message.content
           : completionResponse;
 

@@ -1,3 +1,3 @@
-const { main } = require('./index');
+import { main } from './index.js'
 
 main();
